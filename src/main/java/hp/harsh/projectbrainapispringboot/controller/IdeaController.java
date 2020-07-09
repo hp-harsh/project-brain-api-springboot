@@ -32,7 +32,14 @@ public class IdeaController {
 
     @DeleteMapping("/idea/remove")
     public String removeOne(@RequestParam Long id) {
+        Idea idea = ideaRepository.findById(id).orElseThrow();
+        idea.getAuthor().getIdeas().remove(idea);
+        idea.setAuthor(null);
+
+        ideaRepository.save(idea);
+
         ideaRepository.deleteById(id);
+        
         return "idea";
     }
 
