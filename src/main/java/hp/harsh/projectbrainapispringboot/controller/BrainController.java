@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import hp.harsh.projectbrainapispringboot.form.BrainFollowForm;
 import hp.harsh.projectbrainapispringboot.form.BrainForm;
 import hp.harsh.projectbrainapispringboot.form.BrainLoginForm;
+import hp.harsh.projectbrainapispringboot.form.BrainResponseForm;
 import hp.harsh.projectbrainapispringboot.form.BrainUpdateProfileForm;
+import hp.harsh.projectbrainapispringboot.form.IdeaResponseForm;
 import hp.harsh.projectbrainapispringboot.model.Brain;
 import hp.harsh.projectbrainapispringboot.model.Idea;
 import hp.harsh.projectbrainapispringboot.repository.BrainRepository;
@@ -59,34 +61,43 @@ public class BrainController {
         return brain;
     }
 
-    @GetMapping("/brain/{username}/ideas")
-    public Set<Idea> getIdeasForBrain(@PathVariable String username) {
+    @GetMapping(value = "/brain/{username}/ideas")
+    public IdeaResponseForm getIdeasForBrain(@PathVariable String username) {
+        IdeaResponseForm responseForm = new IdeaResponseForm();
         try {
-            return brainRepository.findBrainByUsername(username).orElseThrow().getIdeas();
+            responseForm.setData(brainRepository.findBrainByUsername(username).orElseThrow().getIdeas());
         } catch (Exception e) {
             e.printStackTrace();
-            return new HashSet<Idea>();
+            responseForm.setData(new HashSet<Idea>());
         }
+        return responseForm;
     }
 
     @GetMapping("/brain/{username}/todos")
-    public Set<Idea> getTodosForBrain(@PathVariable String username) {
+    public IdeaResponseForm getTodosForBrain(@PathVariable String username) {
+        IdeaResponseForm responseForm = new IdeaResponseForm();
         try {
-            return brainRepository.findBrainByUsername(username).orElseThrow().getTodos();
+            responseForm.setData(brainRepository.findBrainByUsername(username).orElseThrow().getTodos());
         } catch (Exception e) {
             e.printStackTrace();
-            return new HashSet<Idea>();
+            responseForm.setData(new HashSet<Idea>());
         }
+        return responseForm;
     }
 
     @GetMapping("/brain/{username}/followers")
-    public Set<Brain> getFollowersForBrain(@PathVariable String username) {
+    public BrainResponseForm getFollowersForBrain(@PathVariable String username) {
+        BrainResponseForm responseForm = new BrainResponseForm();
+
         try {
-            return brainRepository.findBrainByUsername(username).orElseThrow().getFollowers();
+            responseForm.setData(brainRepository.findBrainByUsername(username).orElseThrow().getFollowers());
+
         } catch (Exception e) {
             e.printStackTrace();
-            return new HashSet<Brain>();
+            
+            responseForm.setData(new HashSet<Brain>());
         }
+        return responseForm;
     }
 
     @PostMapping("/brain/update")

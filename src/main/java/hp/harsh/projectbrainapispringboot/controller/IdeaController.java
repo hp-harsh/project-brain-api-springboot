@@ -39,8 +39,8 @@ public class IdeaController {
         ideaRepository.save(idea);
 
         ideaRepository.deleteById(id);
-        
-        return "idea";
+
+        return "Success";
     }
 
     @PostMapping("/ideas")
