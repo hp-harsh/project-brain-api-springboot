@@ -75,6 +75,7 @@ public class BrainController {
 
     @GetMapping("/brain/{username}/todos")
     public IdeaResponseForm getTodosForBrain(@PathVariable String username) {
+
         IdeaResponseForm responseForm = new IdeaResponseForm();
         try {
             responseForm.setData(brainRepository.findBrainByUsername(username).orElseThrow().getTodos());
