@@ -11,6 +11,7 @@ import hp.harsh.projectbrainapispringboot.repository.IdeaRepository;
 
 import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 public class IdeaController {
@@ -26,6 +27,25 @@ public class IdeaController {
         IdeaResponseForm responseForm = new IdeaResponseForm();
         try {
             responseForm.setData(new HashSet<Idea>(ideaRepository.findAll()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseForm.setData(new HashSet<Idea>());
+        }
+        return responseForm;
+    }
+
+    @GetMapping(value = "/idea/{title}/ideas")
+    public IdeaResponseForm getIdeasByTitle(@PathVariable String title) {
+        IdeaResponseForm responseForm = new IdeaResponseForm();
+        try {
+            Set<Idea> ideasByTitle = ideaRepository.findIdeaByTitleContainingIgnoreCase(title);
+
+            if(ideasByTitle == null) {
+                responseForm.setData(new HashSet<>());
+            } else {
+                responseForm.setData(ideasByTitle);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
             responseForm.setData(new HashSet<Idea>());
@@ -57,6 +77,7 @@ public class IdeaController {
     @PostMapping("/ideas")
     public Idea save(@RequestBody IdeaForm ideaForm) {
         Idea idea = new Idea();
+        idea.setOriginalId(ideaForm.getOriginalId());
         idea.setTitle(ideaForm.getTitle());
         idea.setContext(ideaForm.getContent());
         idea.setContent(ideaForm.getContent());

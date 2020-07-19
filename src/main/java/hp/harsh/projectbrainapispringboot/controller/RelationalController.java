@@ -30,6 +30,7 @@ public class RelationalController {
             Brain brain = brainRepository.findBrainByUsername(newIdeaForm.getUsername()).orElseThrow();
 
             Idea idea = new Idea();
+            idea.setOriginalId(newIdeaForm.getOriginalId());
             idea.setTitle(newIdeaForm.getTitle());
             idea.setContext(newIdeaForm.getContext());
             idea.setContent(newIdeaForm.getContent());
